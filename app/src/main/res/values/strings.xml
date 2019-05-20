@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Notes</string>
+    <string name="intent_note">intent_note</string>
+    <string name="error_intent_note">ERROR: Can\'t display note properties Close the app and try again</string>
+</resources>
