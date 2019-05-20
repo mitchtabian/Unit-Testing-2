@@ -1,3 +1,5 @@
+<a href='https://codingwithmitch.com/courses/unit-testing-android-2/' target='_blank'><img class='header-img' src='https://codingwithmitch.s3.amazonaws.com/static/unit-testing-android-2/images/Unit_Testing_thumbnail.png' /></a>
+
 <h1> Unit-Testing-2</h1>
 <p>Unit Testing with JUnit5, JUnit4, Mockito, MVVM (repository pattern), Room Persistence, RxJava, (Java)</p>
 
