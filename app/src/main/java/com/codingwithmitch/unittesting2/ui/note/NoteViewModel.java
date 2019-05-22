@@ -13,8 +13,6 @@ import com.codingwithmitch.unittesting2.util.DateUtil;
 
 import javax.inject.Inject;
 
-import io.reactivex.disposables.Disposable;
-
 public class NoteViewModel extends ViewModel {
 
     private static final String TAG = "NoteViewModel";
