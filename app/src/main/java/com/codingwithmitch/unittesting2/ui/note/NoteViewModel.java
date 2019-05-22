@@ -35,11 +35,11 @@ public class NoteViewModel extends ViewModel {
         hasActivityCreated.setValue(false);
     }
 
-    public LiveData<Integer> insertNote() throws Exception {
+    public LiveData<Resource<Integer>> insertNote() throws Exception {
         return noteRepository.insertNote(note.getValue());
     }
 
-    public LiveData<Integer> updateNote() throws Exception {
+    public LiveData<Resource<Integer>> updateNote() throws Exception {
         return noteRepository.updateNote(note.getValue());
     }
 
@@ -84,7 +84,7 @@ public class NoteViewModel extends ViewModel {
         return new NoteInsertUpdateHelper<Integer>(){
 
             @Override
-            public LiveData<Integer> getAction() throws Exception {
+            public LiveData<Resource<Integer>> getAction() throws Exception {
                 if(isNewNote){
                     return insertNote();
                 }

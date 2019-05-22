@@ -10,11 +10,6 @@ import com.codingwithmitch.unittesting2.ui.Resource;
 
 public abstract class NoteInsertUpdateHelper<T> {
 
-    public static final String INSERT_SUCCESS = "Insert success";
-    public static final String INSERT_FAILED = "Insert failed";
-    public static final String UPDATE_SUCCESS = "Update success";
-    public static final String UPDATE_FAILED = "Update failed";
-    public static final String GENERIC_FAILURE = "Something went wrong";
     public static final String ACTION_INSERT = "ACTION_INSERT";
     public static final String ACTION_UPDATE = "ACTION_UPDATE";
 
@@ -28,39 +23,12 @@ public abstract class NoteInsertUpdateHelper<T> {
 
         result.setValue((Resource<T>) Resource.loading(null));
         try {
-            result.addSource(getAction(), new Observer<T>() {
+            result.addSource(getAction(), new Observer<Resource<T>>() {
                 @Override
-                public void onChanged(T t) {
+                public void onChanged(Resource<T> tResource) {
+                    result.setValue(tResource);
 
-                    int i = (Integer)t;
-                    try {
-                        switch (defineAction()){
-                            case ACTION_INSERT:{
-                                if(i >= 0){
-                                    setNoteId(i);
-                                    result.setValue(Resource.success(t, INSERT_SUCCESS));
-                                }
-                                else{
-                                    result.setValue((Resource<T>) Resource.error(INSERT_FAILED, null));
-                                }
-                                break;
-                            }
-
-                            case ACTION_UPDATE:{
-                                if(i > 0){
-                                    result.setValue(Resource.success(t, UPDATE_SUCCESS));
-                                }
-                                else{
-                                    result.setValue((Resource<T>) Resource.error(UPDATE_FAILED, null));
-                                }
-                                break;
-                            }
-                        }
-                        result.removeSource(getAction());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        result.setValue((Resource<T>) Resource.error(GENERIC_FAILURE, null));
-                    }
+                    setNewNoteId(tResource);
                 }
             });
         } catch (Exception e) {
@@ -68,9 +36,22 @@ public abstract class NoteInsertUpdateHelper<T> {
         }
     }
 
+    private void setNewNoteId(Resource<T> resource){
+        if(resource.data != null) {
+            if (resource.data.getClass() == Integer.class) {
+                int i = (Integer) resource.data;
+                if (defineAction().equals(ACTION_INSERT)) {
+                    if (i >= 0) {
+                        setNoteId(i);
+                    }
+                }
+            }
+        }
+    }
+
     public abstract void setNoteId(int noteId);
 
-    public abstract LiveData<T> getAction() throws Exception;
+    public abstract LiveData<Resource<T>> getAction() throws Exception;
 
     public abstract String defineAction();
 

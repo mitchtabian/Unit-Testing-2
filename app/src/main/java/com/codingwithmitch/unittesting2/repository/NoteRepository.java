@@ -24,6 +24,10 @@ public class NoteRepository {
     public static final String INVALID_NOTE_ID = "Invalid id. Can't delete note";
     public static final String DELETE_SUCCESS = "Delete success";
     public static final String DELETE_FAILURE = "Delete failure";
+    public static final String UPDATE_SUCCESS = "Update success";
+    public static final String UPDATE_FAILURE = "Update failure";
+    public static final String INSERT_SUCCESS = "Insert success";
+    public static final String INSERT_FAILURE = "Insert failure";
 
     // inject
     @NonNull
@@ -34,12 +38,13 @@ public class NoteRepository {
         this.noteDao = noteDao;
     }
 
-    public LiveData<Integer> insertNote(final Note note) throws Exception{
+    public LiveData<Resource<Integer>> insertNote(final Note note) throws Exception{
 
         checkTitle(note);
 
         return LiveDataReactiveStreams.fromPublisher(
                 noteDao.insertNote(note)
+
                         .map(new Function<Long, Integer>() {
                             @Override
                             public Integer apply(Long aLong) throws Exception {
@@ -53,12 +58,21 @@ public class NoteRepository {
                                 return -1;
                             }
                         })
+                        .map(new Function<Integer, Resource<Integer>>() {
+                            @Override
+                            public Resource<Integer> apply(Integer integer) throws Exception {
+                                if(integer > 0){
+                                    return Resource.success(integer, INSERT_SUCCESS);
+                                }
+                                return Resource.error(INSERT_FAILURE, null);
+                            }
+                        })
                         .subscribeOn(Schedulers.io())
                         .toFlowable()
         );
     }
 
-    public LiveData<Integer> updateNote(final Note note) throws Exception{
+    public LiveData<Resource<Integer>> updateNote(final Note note) throws Exception{
 
         checkTitle(note);
 
@@ -69,6 +83,15 @@ public class NoteRepository {
                             @Override
                             public Integer apply(Throwable throwable) throws Exception {
                                 return -1;
+                            }
+                        })
+                        .map(new Function<Integer, Resource<Integer>>() {
+                            @Override
+                            public Resource<Integer> apply(Integer integer) throws Exception {
+                                if(integer > 0){
+                                    return Resource.success(integer, UPDATE_SUCCESS);
+                                }
+                                return Resource.error(UPDATE_FAILURE, null);
                             }
                         })
                         .subscribeOn(Schedulers.io())
