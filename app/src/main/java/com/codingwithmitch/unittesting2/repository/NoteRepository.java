@@ -47,6 +47,12 @@ public class NoteRepository {
                                 return (int)l;
                             }
                         })
+                        .onErrorReturn(new Function<Throwable, Integer>() {
+                            @Override
+                            public Integer apply(Throwable throwable) throws Exception {
+                                return -1;
+                            }
+                        })
                         .subscribeOn(Schedulers.io())
                         .toFlowable()
         );
@@ -59,6 +65,12 @@ public class NoteRepository {
         return LiveDataReactiveStreams.fromPublisher(
 
                 noteDao.updateNote(note)
+                        .onErrorReturn(new Function<Throwable, Integer>() {
+                            @Override
+                            public Integer apply(Throwable throwable) throws Exception {
+                                return -1;
+                            }
+                        })
                         .subscribeOn(Schedulers.io())
                         .toFlowable()
         );
@@ -70,6 +82,12 @@ public class NoteRepository {
 
         return LiveDataReactiveStreams.fromPublisher(
                 noteDao.deleteNote(note)
+                        .onErrorReturn(new Function<Throwable, Integer>() {
+                            @Override
+                            public Integer apply(Throwable throwable) throws Exception {
+                                return -1;
+                            }
+                        })
                         .map(new Function<Integer, Resource<Integer>>() {
                             @Override
                             public Resource<Integer> apply(Integer integer) throws Exception {
