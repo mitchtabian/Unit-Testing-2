@@ -135,9 +135,9 @@ public class NotesListActivity extends DaggerAppCompatActivity implements
                 public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
                     Note note = adapter.getNote(viewHolder.getAdapterPosition());
                     adapter.removeNote(note);
-                    final LiveData<Resource<Integer>> deleteAction;
+
                     try {
-                        deleteAction = viewModel.deleteNote(note);
+                        final LiveData<Resource<Integer>> deleteAction = viewModel.deleteNote(note);
                         deleteAction.observe(NotesListActivity.this, new Observer<Resource<Integer>>() {
                             @Override
                             public void onChanged(Resource<Integer> integerResource) {

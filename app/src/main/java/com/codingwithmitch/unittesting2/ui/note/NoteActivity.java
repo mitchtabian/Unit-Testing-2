@@ -143,6 +143,7 @@ public class NoteActivity extends DaggerAppCompatActivity implements
     }
 
     private void saveNote(){
+        Log.d(TAG, "saveNote: called.");
         try {
             viewModel.saveNote().observe(this, new Observer<Resource<Integer>>() {
                 @Override
@@ -152,24 +153,23 @@ public class NoteActivity extends DaggerAppCompatActivity implements
                             switch (integerResource.status){
 
                                 case SUCCESS:{
+                                    Log.e(TAG, "onChanged: save note: success..." );
                                     showSnackBar(integerResource.message);
                                     break;
                                 }
 
                                 case ERROR:{
+                                    Log.e(TAG, "onChanged: save note: error..." );
                                     showSnackBar(integerResource.message);
                                     break;
                                 }
 
                                 case LOADING:{
-                                    Log.e(TAG, "onChanged: saving note..." );
+                                    Log.e(TAG, "onChanged: save note: loading..." );
                                     break;
                                 }
                             }
                         }
-
-                        viewModel.saveNote().removeObserver(this);
-
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

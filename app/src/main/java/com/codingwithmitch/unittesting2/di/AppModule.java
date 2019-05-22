@@ -8,6 +8,7 @@ import androidx.room.Room;
 import com.codingwithmitch.unittesting2.persistence.NoteDao;
 import com.codingwithmitch.unittesting2.persistence.NoteDatabase;
 import com.codingwithmitch.unittesting2.repository.NoteRepository;
+import com.codingwithmitch.unittesting2.ui.note.NoteInsertUpdateHelper;
 
 import javax.inject.Singleton;
 
@@ -42,3 +43,25 @@ public class AppModule {
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,8 +1,7 @@
 package com.codingwithmitch.unittesting2.ui.note;
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.LiveDataReactiveStreams;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -11,7 +10,11 @@ import com.codingwithmitch.unittesting2.repository.NoteRepository;
 import com.codingwithmitch.unittesting2.ui.Resource;
 import com.codingwithmitch.unittesting2.util.DateUtil;
 
+import org.reactivestreams.Subscription;
+
 import javax.inject.Inject;
+
+import io.reactivex.functions.Consumer;
 
 public class NoteViewModel extends ViewModel {
 
@@ -28,6 +31,8 @@ public class NoteViewModel extends ViewModel {
     private MutableLiveData<ViewState> viewState = new MutableLiveData<>();
     private MutableLiveData<Boolean> hasActivityCreated = new MutableLiveData<>();
     private boolean isNewNote;
+    private Subscription updateSubscription, insertSubscription;
+
 
     @Inject
     public NoteViewModel(NoteRepository noteRepository) {
@@ -36,11 +41,27 @@ public class NoteViewModel extends ViewModel {
     }
 
     public LiveData<Resource<Integer>> insertNote() throws Exception {
-        return noteRepository.insertNote(note.getValue());
+        return LiveDataReactiveStreams.fromPublisher(
+                noteRepository.insertNote(note.getValue())
+                        .doOnSubscribe(new Consumer<Subscription>() {
+                            @Override
+                            public void accept(Subscription subscription) throws Exception {
+                                insertSubscription = subscription;
+                            }
+                        })
+        );
     }
 
     public LiveData<Resource<Integer>> updateNote() throws Exception {
-        return noteRepository.updateNote(note.getValue());
+        return LiveDataReactiveStreams.fromPublisher(
+                noteRepository.updateNote(note.getValue())
+                        .doOnSubscribe(new Consumer<Subscription>() {
+                            @Override
+                            public void accept(Subscription subscription) throws Exception {
+                                updateSubscription = subscription;
+                            }
+                        })
+        );
     }
 
     public LiveData<Boolean> hasActivityCreated(){
@@ -75,14 +96,14 @@ public class NoteViewModel extends ViewModel {
     }
 
     public LiveData<Resource<Integer>> saveNote() throws Exception{
-        Log.d(TAG, "saveNote: attempting to save note...");
 
         if(!shouldAllowSave()){
             throw new Exception(NO_CONTENT_ERROR);
         }
 
-        return new NoteInsertUpdateHelper<Integer>(){
+        cancelPendingTransactions();
 
+        return new NoteInsertUpdateHelper<Integer>(){
             @Override
             public LiveData<Resource<Integer>> getAction() throws Exception {
                 if(isNewNote){
@@ -110,7 +131,32 @@ public class NoteViewModel extends ViewModel {
                 currentNote.setId(noteId);
                 note.setValue(currentNote);
             }
+
+            @Override
+            public void onTransactionComplete() {
+                updateSubscription = null;
+                insertSubscription = null;
+            }
         }.getAsLiveData();
+    }
+
+    private void cancelPendingTransactions(){
+        if(insertSubscription != null){
+            cancelInsertTransaction();
+        }
+        if(updateSubscription != null){
+            cancelUpdateTransaction();
+        }
+    }
+
+    private void cancelUpdateTransaction(){
+        updateSubscription.cancel();
+        updateSubscription = null;
+    }
+
+    private void cancelInsertTransaction(){
+        insertSubscription.cancel();
+        insertSubscription = null;
     }
 
     public void updateNote(String title, String content) throws Exception{
