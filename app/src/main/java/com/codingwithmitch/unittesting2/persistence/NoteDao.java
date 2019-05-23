@@ -12,9 +12,6 @@ import com.codingwithmitch.unittesting2.models.Note;
 
 import java.util.List;
 
-import io.reactivex.Completable;
-import io.reactivex.Flowable;
-import io.reactivex.Observable;
 import io.reactivex.Single;
 
 

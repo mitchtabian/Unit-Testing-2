@@ -18,21 +18,13 @@ import org.junit.jupiter.api.function.Executable;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.Flowable;
-import io.reactivex.Observable;
-import io.reactivex.Observer;
+
 import io.reactivex.Single;
-import io.reactivex.functions.Consumer;
-import io.reactivex.observers.TestObserver;
-import io.reactivex.schedulers.Schedulers;
-import io.reactivex.schedulers.TestScheduler;
-import io.reactivex.subscribers.TestSubscriber;
 
 import static com.codingwithmitch.unittesting2.repository.NoteRepository.DELETE_FAILURE;
 import static com.codingwithmitch.unittesting2.repository.NoteRepository.DELETE_SUCCESS;
 import static com.codingwithmitch.unittesting2.repository.NoteRepository.INSERT_FAILURE;
 import static com.codingwithmitch.unittesting2.repository.NoteRepository.INSERT_SUCCESS;
-import static com.codingwithmitch.unittesting2.repository.NoteRepository.UPDATE_FAILURE;
 import static com.codingwithmitch.unittesting2.repository.NoteRepository.UPDATE_SUCCESS;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
