@@ -14,10 +14,21 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.function.Executable;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.Flowable;
+import io.reactivex.Single;
+import io.reactivex.internal.operators.single.SingleToFlowable;
+
+import static com.codingwithmitch.unittesting2.repository.NoteRepository.INSERT_SUCCESS;
+import static com.codingwithmitch.unittesting2.repository.NoteRepository.UPDATE_FAILURE;
+import static com.codingwithmitch.unittesting2.repository.NoteRepository.UPDATE_SUCCESS;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -92,19 +103,33 @@ public class NoteViewModelTest {
     void insertNote_returnRow() throws Exception {
         // Arrange
         Note note = new Note(TestUtil.TEST_NOTE_1);
-        LiveDataTestUtil<Integer> liveDataTestUtil = new LiveDataTestUtil<>();
+        LiveDataTestUtil<Resource<Integer>> liveDataTestUtil = new LiveDataTestUtil<>();
         final int insertedRow = 1;
-        MutableLiveData<Integer> returnData = new MutableLiveData<>();
-        returnData.setValue(insertedRow);
+        Flowable<Resource<Integer>> returnData = SingleToFlowable.just(Resource.success(insertedRow, INSERT_SUCCESS));
         when(noteRepository.insertNote(any(Note.class))).thenReturn(returnData);
 
         // Act
         noteViewModel.setNote(note);
-        Integer data = liveDataTestUtil.getValue(noteViewModel.insertNote());
+        noteViewModel.setIsNewNote(true);
+        Resource<Integer> returnedValue = liveDataTestUtil.getValue(noteViewModel.saveNote());
 
         // Assert
-        assertEquals(insertedRow, data.intValue());
+        assertEquals(Resource.success(insertedRow, INSERT_SUCCESS), returnedValue);
     }
+
+//    /*
+//        Attempt to insert new note (NoteA)
+//        Edit the note before it's been inserted
+//        Attempt to insert the updated note (NoteB)
+//        result:
+//                1) cancel the insertion of NoteA
+//                2) insert NoteB
+//     */
+//    @Test
+//    void todo() throws Exception {
+//
+//    }
+
 
     /*
         insert: dont return a new row without observer
@@ -143,24 +168,24 @@ public class NoteViewModelTest {
 
 
     /*
-            Update a note and observe row number returned
-         */
+        Update a note and observe row number returned
+    */
     @Test
     void updateNote_returnRowNum() throws Exception {
         // Arrange
         Note note = new Note(TestUtil.TEST_NOTE_1);
-        LiveDataTestUtil<Integer> liveDataTestUtil = new LiveDataTestUtil<>();
-        int updatedRow = 1;
-        MutableLiveData<Integer> returnData = new MutableLiveData<>();
-        returnData.setValue(updatedRow);
+        LiveDataTestUtil<Resource<Integer>> liveDataTestUtil = new LiveDataTestUtil<>();
+        final int numUpdatedRows = 1;
+        Flowable<Resource<Integer>> returnData = SingleToFlowable.just(Resource.success(numUpdatedRows, UPDATE_SUCCESS));
         when(noteRepository.updateNote(any(Note.class))).thenReturn(returnData);
 
         // Act
         noteViewModel.setNote(note);
-        Integer observedReturnValue = liveDataTestUtil.getValue(noteViewModel.updateNote());
+        noteViewModel.setIsNewNote(false);
+        Resource<Integer> observedReturnValue = liveDataTestUtil.getValue(noteViewModel.saveNote());
 
         // Assert
-        assertEquals(updatedRow, observedReturnValue.intValue());
+        assertEquals(Resource.success(numUpdatedRows, UPDATE_SUCCESS), observedReturnValue);
     }
 
     /*

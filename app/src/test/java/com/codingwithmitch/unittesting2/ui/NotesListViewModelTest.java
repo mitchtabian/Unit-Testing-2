@@ -4,19 +4,16 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.codingwithmitch.unittesting2.models.Note;
 import com.codingwithmitch.unittesting2.repository.NoteRepository;
-import com.codingwithmitch.unittesting2.ui.note.NoteViewModel;
 import com.codingwithmitch.unittesting2.ui.noteslist.NotesListViewModel;
 import com.codingwithmitch.unittesting2.util.InstantExecutorExtension;
 import com.codingwithmitch.unittesting2.util.LiveDataTestUtil;
 import com.codingwithmitch.unittesting2.util.TestUtil;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
@@ -121,7 +118,7 @@ public class NotesListViewModelTest {
     void deleteNote_observeResourceError() throws Exception {
         // Arrange
         Note deletedNote = TestUtil.TEST_NOTE_1;
-        Resource<Integer> returnedData = Resource.error(DELETE_FAILURE, 1);
+        Resource<Integer> returnedData = Resource.error( 1, DELETE_FAILURE);
         LiveDataTestUtil<Resource<Integer>> liveDataTestUtil = new LiveDataTestUtil<>();
         MutableLiveData<Resource<Integer>> returnedValued = new MutableLiveData<>();
         returnedValued.setValue(returnedData);

@@ -35,7 +35,7 @@ public class NoteDaoTest extends NoteDatabaseTest {
         Note note = new Note(TestUtil.TEST_NOTE_1);
 
         // insert
-        getNoteDao().insertNote(note).blockingGet();
+        getNoteDao().insertNote(note).blockingGet(); // wait until inserted
 
         // read
         LiveDataTestUtil<List<Note>> liveDataTestUtil = new LiveDataTestUtil<>();
@@ -51,7 +51,7 @@ public class NoteDaoTest extends NoteDatabaseTest {
         assertEquals(note, insertedNotes.get(0));
 
         // delete
-        getNoteDao().deleteNote(note).blockingGet();
+        getNoteDao().deleteNote(note).blockingGet(); // wait until deleted
 
         // confirm the database is empty
         insertedNotes = liveDataTestUtil.getValue(getNoteDao().getNotes());

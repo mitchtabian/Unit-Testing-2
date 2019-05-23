@@ -1,6 +1,5 @@
 package com.codingwithmitch.unittesting2;
 
-import android.util.Log;
 
 import androidx.room.Room;
 import androidx.test.core.app.ApplicationProvider;
