@@ -11,7 +11,7 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "notes")
-public class Note implements Parcelable{
+public class Note implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
@@ -26,14 +26,15 @@ public class Note implements Parcelable{
     @ColumnInfo(name = "timestamp")
     private String timestamp;
 
-    public Note(String title, String content, String timestamp) {
+    public Note(@NonNull String title, String content, String timestamp) {
         this.title = title;
         this.content = content;
         this.timestamp = timestamp;
     }
 
     @Ignore
-    public Note(int id, String title, String content, String timestamp) {
+    public Note(int id, @NonNull String title, String content, String timestamp) {
+        this.id = id;
         this.title = title;
         this.content = content;
         this.timestamp = timestamp;
@@ -41,15 +42,14 @@ public class Note implements Parcelable{
 
     @Ignore
     public Note() {
-
     }
 
     @Ignore
-    public Note(Note note){
-        id = note.getId();
-        title = note.getTitle();
-        content = note.getContent();
-        timestamp = note.getTimestamp();
+    public Note(Note note) {
+        id = note.id;
+        title = note.title;
+        content = note.content;
+        timestamp = note.timestamp;
     }
 
     protected Note(Parcel in) {
@@ -59,7 +59,7 @@ public class Note implements Parcelable{
         timestamp = in.readString();
     }
 
-    public static final Parcelable.Creator<Note> CREATOR = new Parcelable.Creator<Note>() {
+    public static final Creator<Note> CREATOR = new Creator<Note>() {
         @Override
         public Note createFromParcel(Parcel in) {
             return new Note(in);
@@ -79,11 +79,12 @@ public class Note implements Parcelable{
         this.id = id;
     }
 
+    @NonNull
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(@NonNull String title) {
         this.title = title;
     }
 
@@ -106,12 +107,12 @@ public class Note implements Parcelable{
     @Override
     public String toString() {
         return "Note{" +
-                "title='" + title + '\'' +
+                "id=" + id +
+                ", title='" + title + '\'' +
                 ", content='" + content + '\'' +
                 ", timestamp='" + timestamp + '\'' +
                 '}';
     }
-
 
     @Override
     public int describeContents() {
@@ -119,11 +120,11 @@ public class Note implements Parcelable{
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(id);
-        parcel.writeString(title);
-        parcel.writeString(content);
-        parcel.writeString(timestamp);
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(title);
+        dest.writeString(content);
+        dest.writeString(timestamp);
     }
 
     @Override
@@ -134,11 +135,13 @@ public class Note implements Parcelable{
         if(getClass() != obj.getClass()){
             return false;
         }
-
         Note note = (Note) obj;
         return note.getId() == getId() && note.getTitle().equals(getTitle()) && note.getContent().equals(getContent());
     }
 }
+
+
+
 
 
 

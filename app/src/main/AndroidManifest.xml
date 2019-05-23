@@ -3,15 +3,13 @@
     package="com.codingwithmitch.unittesting2">
 
     <application
-        android:name=".BaseApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.note.NoteActivity"></activity>
-        <activity android:name=".ui.noteslist.NotesListActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
