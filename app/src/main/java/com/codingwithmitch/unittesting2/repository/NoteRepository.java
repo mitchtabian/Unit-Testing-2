@@ -49,11 +49,11 @@ public class NoteRepository {
         this.noteDao = noteDao;
     }
 
-    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
-    public void setTransactionDelay(int timeDelay, TimeUnit timeUnit){
-        this.timeDelay = timeDelay;
-        this.timeUnit = timeUnit;
-    }
+//    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+//    public void setTransactionDelay(int timeDelay, TimeUnit timeUnit){
+//        this.timeDelay = timeDelay;
+//        this.timeUnit = timeUnit;
+//    }
 
     public Flowable<Resource<Integer>> insertNote(final Note note) throws Exception{
 
@@ -80,7 +80,7 @@ public class NoteRepository {
                         if(integer > 0){
                             return Resource.success(integer, INSERT_SUCCESS);
                         }
-                        return Resource.error(INSERT_FAILURE, null);
+                        return Resource.error(null, INSERT_FAILURE);
                     }
                 })
                 .subscribeOn(Schedulers.io())
@@ -105,7 +105,7 @@ public class NoteRepository {
                         if(integer > 0){
                             return Resource.success(integer, UPDATE_SUCCESS);
                         }
-                        return Resource.error(UPDATE_FAILURE, null);
+                        return Resource.error(null, UPDATE_FAILURE);
                     }
                 })
                 .subscribeOn(Schedulers.io())
@@ -131,7 +131,7 @@ public class NoteRepository {
                                 if(integer > 0){
                                     return Resource.success(integer, DELETE_SUCCESS);
                                 }
-                                return Resource.error(DELETE_FAILURE, null);
+                                return Resource.error(null, DELETE_FAILURE);
                             }
                         })
                         .subscribeOn(Schedulers.io())

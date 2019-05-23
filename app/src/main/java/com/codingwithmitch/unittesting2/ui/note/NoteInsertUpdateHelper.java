@@ -34,7 +34,7 @@ public abstract class NoteInsertUpdateHelper<T> {
             });
         } catch (Exception e) {
             e.printStackTrace();
-            result.setValue(Resource.<T>error(GENERIC_ERROR, null));
+            result.setValue(Resource.<T>error(null, GENERIC_ERROR));
         }
     }
 

@@ -163,8 +163,8 @@ public class NoteViewModel extends ViewModel {
         if(title == null || title.equals("")){
             throw new NullPointerException("Title can't be null");
         }
-        content = removeWhiteSpace(content);
-        if(content.length() > 0){
+        String temp = removeWhiteSpace(content);
+        if(temp.length() > 0){
             Note updatedNote = new Note(note.getValue());
             updatedNote.setTitle(title);
             updatedNote.setContent(content);
