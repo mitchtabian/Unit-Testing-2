@@ -3,8 +3,10 @@ package com.codingwithmitch.unittesting2;
 import androidx.room.Room;
 import androidx.test.core.app.ApplicationProvider;
 
+import com.codingwithmitch.unittesting2.models.Note;
 import com.codingwithmitch.unittesting2.persistence.NoteDao;
 import com.codingwithmitch.unittesting2.persistence.NoteDatabase;
+import com.codingwithmitch.unittesting2.util.TestUtil;
 
 import org.junit.After;
 import org.junit.Before;
@@ -13,6 +15,7 @@ public abstract class NoteDatabaseTest {
 
     // system under test
     private NoteDatabase noteDatabase;
+
 
     public NoteDao getNoteDao(){
         return noteDatabase.getNoteDao();

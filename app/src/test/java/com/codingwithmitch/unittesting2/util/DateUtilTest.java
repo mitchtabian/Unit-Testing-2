@@ -1,5 +1,7 @@
 package com.codingwithmitch.unittesting2.util;
 
+import com.codingwithmitch.unittesting2.models.Note;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
@@ -19,7 +21,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class DateUtilTest {
 
     private static final String today = "05-2019";
-
     @Test
     public void testGetCurrentTimestamp_returnedTimestamp(){
         assertDoesNotThrow(new Executable() {
