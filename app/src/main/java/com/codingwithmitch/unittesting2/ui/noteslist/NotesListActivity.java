@@ -1,10 +1,11 @@
-package com.codingwithmitch.unittesting2;
+package com.codingwithmitch.unittesting2.ui.noteslist;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
 
+import com.codingwithmitch.unittesting2.R;
 import com.codingwithmitch.unittesting2.repository.NoteRepository;
 
 import javax.inject.Inject;

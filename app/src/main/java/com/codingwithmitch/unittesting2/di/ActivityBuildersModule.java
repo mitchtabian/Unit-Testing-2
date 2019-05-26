@@ -1,6 +1,6 @@
 package com.codingwithmitch.unittesting2.di;
 
-import com.codingwithmitch.unittesting2.NotesListActivity;
+import com.codingwithmitch.unittesting2.ui.noteslist.NotesListActivity;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
