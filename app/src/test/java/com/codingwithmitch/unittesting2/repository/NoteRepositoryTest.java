@@ -1,5 +1,6 @@
 package com.codingwithmitch.unittesting2.repository;
 
+
 import com.codingwithmitch.unittesting2.models.Note;
 import com.codingwithmitch.unittesting2.persistence.NoteDao;
 import com.codingwithmitch.unittesting2.ui.Resource;
@@ -9,12 +10,13 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
-import org.mockito.Mockito;
+
 
 import io.reactivex.Single;
 
 import static com.codingwithmitch.unittesting2.repository.NoteRepository.INSERT_FAILURE;
 import static com.codingwithmitch.unittesting2.repository.NoteRepository.INSERT_SUCCESS;
+import static com.codingwithmitch.unittesting2.repository.NoteRepository.NOTE_TITLE_NULL;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -98,7 +100,7 @@ public class NoteRepositoryTest {
     @Test
     void insertNote_nullTitle_throwException() throws Exception {
 
-        assertThrows(Exception.class, new Executable() {
+        Exception exception = assertThrows(Exception.class, new Executable() {
             @Override
             public void execute() throws Throwable {
                 final Note note  = new Note(TestUtil.TEST_NOTE_1);
@@ -106,6 +108,8 @@ public class NoteRepositoryTest {
                 noteRepository.insertNote(note);
             }
         });
+
+        assertEquals(NOTE_TITLE_NULL, exception.getMessage());
     }
 }
 
