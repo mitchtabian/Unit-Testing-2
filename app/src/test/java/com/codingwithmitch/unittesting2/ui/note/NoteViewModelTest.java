@@ -3,12 +3,14 @@ package com.codingwithmitch.unittesting2.ui.note;
 import com.codingwithmitch.unittesting2.models.Note;
 import com.codingwithmitch.unittesting2.repository.NoteRepository;
 import com.codingwithmitch.unittesting2.ui.Resource;
+import com.codingwithmitch.unittesting2.util.InstantExecutorExtension;
 import com.codingwithmitch.unittesting2.util.LiveDataTestUtil;
 import com.codingwithmitch.unittesting2.util.TestUtil;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.function.Executable;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -21,6 +23,7 @@ import static com.codingwithmitch.unittesting2.repository.NoteRepository.INSERT_
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(InstantExecutorExtension.class)
 public class NoteViewModelTest {
 
     // system under test
