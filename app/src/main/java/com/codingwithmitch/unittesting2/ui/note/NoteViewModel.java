@@ -34,6 +34,12 @@ public class NoteViewModel extends ViewModel {
         );
     }
 
+    public LiveData<Resource<Integer>> updateNote() throws Exception{
+        return LiveDataReactiveStreams.fromPublisher(
+                noteRepository.updateNote(note.getValue())
+        );
+    }
+
     public LiveData<Note> observeNote(){
         return note;
     }
