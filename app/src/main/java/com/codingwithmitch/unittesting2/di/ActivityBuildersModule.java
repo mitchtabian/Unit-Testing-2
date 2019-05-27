@@ -1,5 +1,6 @@
 package com.codingwithmitch.unittesting2.di;
 
+import com.codingwithmitch.unittesting2.ui.note.NoteActivity;
 import com.codingwithmitch.unittesting2.ui.noteslist.NotesListActivity;
 
 import dagger.Module;
@@ -10,4 +11,7 @@ public abstract class ActivityBuildersModule {
 
     @ContributesAndroidInjector
     abstract NotesListActivity contributeNotesListActivity();
+
+    @ContributesAndroidInjector
+    abstract NoteActivity contributeNotesActivity();
 }
