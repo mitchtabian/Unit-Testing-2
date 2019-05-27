@@ -72,6 +72,33 @@ public class NoteRepository {
                 .toFlowable();
     }
 
+
+    public Flowable<Resource<Integer>> updateNote(final Note note) throws Exception{
+
+        checkTitle(note);
+
+        return noteDao.updateNote(note)
+                .delaySubscription(timeDelay, timeUnit)
+                .onErrorReturn(new Function<Throwable, Integer>() {
+                    @Override
+                    public Integer apply(Throwable throwable) throws Exception {
+                        return -1;
+                    }
+                })
+                .map(new Function<Integer, Resource<Integer>>() {
+                    @Override
+                    public Resource<Integer> apply(Integer integer) throws Exception {
+
+                        if(integer > 0){
+                            return Resource.success(integer, UPDATE_SUCCESS);
+                        }
+                        return Resource.error(null, UPDATE_FAILURE);
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .toFlowable();
+    }
+
     private void checkTitle(Note note) throws Exception{
         if(note.getTitle() == null){
             throw new Exception(NOTE_TITLE_NULL);
