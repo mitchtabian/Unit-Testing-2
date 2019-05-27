@@ -34,7 +34,6 @@ public class NoteViewModel extends ViewModel {
         );
     }
 
-
     public LiveData<Note> observeNote(){
         return note;
     }
