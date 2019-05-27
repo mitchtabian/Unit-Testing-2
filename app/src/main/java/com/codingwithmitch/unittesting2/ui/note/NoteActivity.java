@@ -74,6 +74,12 @@ public class NoteActivity extends DaggerAppCompatActivity implements
 
         subscribeObservers();
         setListeners();
+
+        if(savedInstanceState == null){
+            getIncomingIntent();
+            enableEditMode();
+        }
+
     }
 
 
@@ -105,17 +111,14 @@ public class NoteActivity extends DaggerAppCompatActivity implements
         editText.addTextChangedListener(this);
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean("has_started", true);
+    }
+
+
     private void subscribeObservers(){
-        viewModel.hasActivityCreated().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
-                if(!aBoolean){
-                    getIncomingIntent();
-                    enableEditMode();
-                    viewModel.setActivityCreated();
-                }
-            }
-        });
 
         viewModel.observeNote().observe(this, new Observer<Note>() {
             @Override

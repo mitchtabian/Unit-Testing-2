@@ -9,6 +9,7 @@ import com.codingwithmitch.unittesting2.util.InstantExecutorExtension;
 import com.codingwithmitch.unittesting2.util.LiveDataTestUtil;
 import com.codingwithmitch.unittesting2.util.TestUtil;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,6 +26,7 @@ import static com.codingwithmitch.unittesting2.repository.NoteRepository.DELETE_
 import static com.codingwithmitch.unittesting2.repository.NoteRepository.DELETE_SUCCESS;
 import static com.codingwithmitch.unittesting2.repository.NoteRepository.INSERT_FAILURE;
 import static com.codingwithmitch.unittesting2.repository.NoteRepository.INSERT_SUCCESS;
+import static com.codingwithmitch.unittesting2.repository.NoteRepository.UPDATE_FAILURE;
 import static com.codingwithmitch.unittesting2.repository.NoteRepository.UPDATE_SUCCESS;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -44,6 +46,11 @@ class NoteRepositoryTest {
         noteDao = mock(NoteDao.class);
         noteRepository = new NoteRepository(noteDao);
     }
+
+//    @BeforeAll
+//    public void init(){
+//
+//    }
 
 
     // ------------------------------------------------------------------------------------
@@ -72,6 +79,7 @@ class NoteRepositoryTest {
         verify(noteDao).insertNote(any(Note.class));
         verifyNoMoreInteractions(noteDao);
 
+        System.out.println("Returned value: " + returnedValue.data);
         assertEquals(Resource.success(1, INSERT_SUCCESS), returnedValue);
 
 
@@ -159,6 +167,32 @@ class NoteRepositoryTest {
 //                .await()
 //                .assertValue(Resource.success(updatedRow, UPDATE_SUCCESS));
     }
+
+
+    /*
+    Update Note
+    Failure (return -1)
+
+ */
+    @Test
+    void updateNote_returnFailure() throws Exception {
+
+        // Arrange
+        final int failedInsert = -1;
+        final Single<Integer> returnedData = Single.just(failedInsert);
+        when(noteDao.updateNote(any(Note.class))).thenReturn(returnedData);
+
+        // Act
+        final Resource<Integer> returnedValue = noteRepository.updateNote(NOTE1).blockingFirst();
+
+        // Assert
+        verify(noteDao).updateNote(any(Note.class));
+        verifyNoMoreInteractions(noteDao);
+
+        assertEquals(Resource.error( null, UPDATE_FAILURE), returnedValue);
+
+    }
+
 
     /*
         update note

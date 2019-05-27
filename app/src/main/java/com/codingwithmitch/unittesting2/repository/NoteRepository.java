@@ -49,11 +49,11 @@ public class NoteRepository {
         this.noteDao = noteDao;
     }
 
-//    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
-//    public void setTransactionDelay(int timeDelay, TimeUnit timeUnit){
-//        this.timeDelay = timeDelay;
-//        this.timeUnit = timeUnit;
-//    }
+    private void checkTitle(Note note) throws Exception{
+        if(note.getTitle() == null){
+            throw new Exception(NOTE_TITLE_NULL);
+        }
+    }
 
     public Flowable<Resource<Integer>> insertNote(final Note note) throws Exception{
 
@@ -143,11 +143,7 @@ public class NoteRepository {
         return noteDao.getNotes();
     }
 
-    private void checkTitle(Note note) throws Exception{
-        if(note.getTitle() == null){
-            throw new Exception(NOTE_TITLE_NULL);
-        }
-    }
+
 
     private void checkId(Note note)throws Exception{
         if(note.getId() < 0){
@@ -155,6 +151,11 @@ public class NoteRepository {
         }
     }
 
+    //    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+//    public void setTransactionDelay(int timeDelay, TimeUnit timeUnit){
+//        this.timeDelay = timeDelay;
+//        this.timeUnit = timeUnit;
+//    }
 }
 
 

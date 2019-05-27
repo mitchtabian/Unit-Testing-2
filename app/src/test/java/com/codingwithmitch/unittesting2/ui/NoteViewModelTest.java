@@ -33,7 +33,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(InstantExecutorExtension.class)
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class NoteViewModelTest {
 
     @Mock
@@ -81,22 +80,6 @@ public class NoteViewModelTest {
     }
 
     /*
-        Observe a note has been set and onChanged will trigger in activity
-     */
-    @Test
-    void dontObserveNote_whenNotSet() throws Exception {
-        // Arrange
-        Note note = new Note(TestUtil.TEST_NOTE_1);
-        LiveDataTestUtil<Note> liveDataTestUtil = new LiveDataTestUtil<>();
-
-        // Act
-        Note data = liveDataTestUtil.getValue(noteViewModel.observeNote());
-
-        // Assert
-        assertNotEquals(note, data);
-    }
-
-    /*
         Insert a new note and observe row returned
      */
     @Test
@@ -116,19 +99,6 @@ public class NoteViewModelTest {
         // Assert
         assertEquals(Resource.success(insertedRow, INSERT_SUCCESS), returnedValue);
     }
-
-//    /*
-//        Attempt to insert new note (NoteA)
-//        Edit the note before it's been inserted
-//        Attempt to insert the updated note (NoteB)
-//        result:
-//                1) cancel the insertion of NoteA
-//                2) insert NoteB
-//     */
-//    @Test
-//    void todo() throws Exception {
-//
-//    }
 
 
     /*
@@ -166,31 +136,34 @@ public class NoteViewModelTest {
         });
     }
 
+    // END INSERTS...
+
 
     /*
-        Update a note and observe row number returned
-    */
+        Insert a new note and observe row returned
+     */
     @Test
-    void updateNote_returnRowNum() throws Exception {
+    void updateNote_returnRow() throws Exception {
         // Arrange
         Note note = new Note(TestUtil.TEST_NOTE_1);
         LiveDataTestUtil<Resource<Integer>> liveDataTestUtil = new LiveDataTestUtil<>();
-        final int numUpdatedRows = 1;
-        Flowable<Resource<Integer>> returnData = SingleToFlowable.just(Resource.success(numUpdatedRows, UPDATE_SUCCESS));
+        final int updatedRow = 1;
+        Flowable<Resource<Integer>> returnData = SingleToFlowable.just(Resource.success(updatedRow, UPDATE_SUCCESS));
         when(noteRepository.updateNote(any(Note.class))).thenReturn(returnData);
 
         // Act
         noteViewModel.setNote(note);
         noteViewModel.setIsNewNote(false);
-        Resource<Integer> observedReturnValue = liveDataTestUtil.getValue(noteViewModel.saveNote());
+        Resource<Integer> returnedValue = liveDataTestUtil.getValue(noteViewModel.saveNote());
 
         // Assert
-        assertEquals(Resource.success(numUpdatedRows, UPDATE_SUCCESS), observedReturnValue);
+        assertEquals(Resource.success(updatedRow, UPDATE_SUCCESS), returnedValue);
     }
 
+
     /*
-       update: dont return a new row without observer
-    */
+    update: dont return a new row without observer
+ */
     @Test
     void dontReturnUpdateRowNumWithoutObserver() throws Exception {
         // Arrange
@@ -203,6 +176,25 @@ public class NoteViewModelTest {
         verify(noteRepository, never()).updateNote(any(Note.class));
     }
 
+
+    @Test
+    void saveNote_shouldAllowSave_returnFalse() throws Exception {
+        // Arrange
+        Note note = new Note(TestUtil.TEST_NOTE_1);
+        note.setContent(null);
+
+        // Act
+        noteViewModel.setNote(note);
+        noteViewModel.setIsNewNote(true);
+
+        // Assert
+        assertThrows(Exception.class, new Executable() {
+            @Override
+            public void execute() throws Throwable {
+                noteViewModel.saveNote();
+            }
+        });
+    }
 }
 
 

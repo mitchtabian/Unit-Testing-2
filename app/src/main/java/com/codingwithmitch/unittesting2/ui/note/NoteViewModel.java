@@ -29,7 +29,6 @@ public class NoteViewModel extends ViewModel {
     // vars
     private MutableLiveData<Note> note = new MutableLiveData<>();
     private MutableLiveData<ViewState> viewState = new MutableLiveData<>();
-    private MutableLiveData<Boolean> hasActivityCreated = new MutableLiveData<>();
     private boolean isNewNote;
     private Subscription updateSubscription, insertSubscription;
 
@@ -37,7 +36,6 @@ public class NoteViewModel extends ViewModel {
     @Inject
     public NoteViewModel(NoteRepository noteRepository) {
         this.noteRepository = noteRepository;
-        hasActivityCreated.setValue(false);
     }
 
     public LiveData<Resource<Integer>> insertNote() throws Exception {
@@ -64,10 +62,6 @@ public class NoteViewModel extends ViewModel {
         );
     }
 
-    public LiveData<Boolean> hasActivityCreated(){
-        return hasActivityCreated;
-    }
-
     public LiveData<Note> observeNote(){
         return note;
     }
@@ -80,10 +74,6 @@ public class NoteViewModel extends ViewModel {
         this.viewState.setValue(viewState);
     }
 
-    public void setActivityCreated(){
-        hasActivityCreated.setValue(true);
-    }
-
     public void setNote(Note note) throws Exception {
         if(note.getTitle() == null || note.getTitle().equals("")){
             throw new NullPointerException("Title can't be null");
@@ -94,6 +84,7 @@ public class NoteViewModel extends ViewModel {
     public void setIsNewNote(boolean isNewNote){
         this.isNewNote = isNewNote;
     }
+
 
     public LiveData<Resource<Integer>> saveNote() throws Exception{
 
