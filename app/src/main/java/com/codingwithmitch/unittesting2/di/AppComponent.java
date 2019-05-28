@@ -12,13 +12,14 @@ import dagger.android.AndroidInjectionModule;
 import dagger.android.AndroidInjector;
 
 @Singleton
-@Component(modules =
-        {
+@Component(
+        modules = {
                 AndroidInjectionModule.class,
-                ActivityBuildersModule.class,
                 AppModule.class,
+                ActivityBuildersModule.class,
                 ViewModelFactoryModule.class,
-        })
+        }
+)
 public interface AppComponent extends AndroidInjector<BaseApplication> {
 
     @Component.Builder

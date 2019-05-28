@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.codingwithmitch.unittesting2.R;
 import com.codingwithmitch.unittesting2.models.Note;
 import com.codingwithmitch.unittesting2.ui.Resource;
+import com.codingwithmitch.unittesting2.ui.note.NoteViewModel;
 import com.codingwithmitch.unittesting2.util.DateUtil;
 import com.codingwithmitch.unittesting2.util.LinedEditText;
 import com.codingwithmitch.unittesting2.viewmodels.ViewModelProviderFactory;
@@ -362,25 +363,6 @@ public class NoteActivity extends DaggerAppCompatActivity implements
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

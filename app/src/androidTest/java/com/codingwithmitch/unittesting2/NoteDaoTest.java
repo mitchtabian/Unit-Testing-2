@@ -8,15 +8,13 @@ import com.codingwithmitch.unittesting2.models.Note;
 import com.codingwithmitch.unittesting2.util.LiveDataTestUtil;
 import com.codingwithmitch.unittesting2.util.TestUtil;
 
+import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 
-
 import java.util.List;
 
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 public class NoteDaoTest extends NoteDatabaseTest {
 
@@ -31,7 +29,8 @@ public class NoteDaoTest extends NoteDatabaseTest {
         Insert, Read, Delete
      */
     @Test
-    public void insertReadDelete() throws Exception {
+    public void insertReadDelete() throws Exception{
+
         Note note = new Note(TestUtil.TEST_NOTE_1);
 
         // insert
@@ -51,22 +50,24 @@ public class NoteDaoTest extends NoteDatabaseTest {
         assertEquals(note, insertedNotes.get(0));
 
         // delete
-        getNoteDao().deleteNote(note).blockingGet(); // wait until deleted
+        getNoteDao().deleteNote(note).blockingGet();
 
         // confirm the database is empty
         insertedNotes = liveDataTestUtil.getValue(getNoteDao().getNotes());
         assertEquals(0, insertedNotes.size());
     }
 
+
     /*
-        Insert, Read, Update, Read, Delete
+        Insert, Read, Update, Read, Delete,
      */
     @Test
     public void insertReadUpdateReadDelete() throws Exception{
-        final Note note = new Note(TestUtil.TEST_NOTE_1);
+
+        Note note = new Note(TestUtil.TEST_NOTE_1);
 
         // insert
-        getNoteDao().insertNote(note).blockingGet();
+        getNoteDao().insertNote(note).blockingGet(); // wait until inserted
 
         // read
         LiveDataTestUtil<List<Note>> liveDataTestUtil = new LiveDataTestUtil<>();
@@ -74,11 +75,11 @@ public class NoteDaoTest extends NoteDatabaseTest {
 
         assertNotNull(insertedNotes);
 
-        assertEquals(note.getTitle(), insertedNotes.get(0).getTitle());
         assertEquals(note.getContent(), insertedNotes.get(0).getContent());
         assertEquals(note.getTimestamp(), insertedNotes.get(0).getTimestamp());
+        assertEquals(note.getTitle(), insertedNotes.get(0).getTitle());
 
-        note.setId(insertedNotes.get(0).getId()); // set the id from the queried note
+        note.setId(insertedNotes.get(0).getId());
         assertEquals(note, insertedNotes.get(0));
 
         // update
@@ -103,14 +104,16 @@ public class NoteDaoTest extends NoteDatabaseTest {
         // confirm the database is empty
         insertedNotes = liveDataTestUtil.getValue(getNoteDao().getNotes());
         assertEquals(0, insertedNotes.size());
-
     }
 
+
+
     /*
-        Insert Note with null title, throw exception
+        Insert note with null title, throw exception
      */
     @Test(expected = SQLiteConstraintException.class)
     public void insert_nullTitle_throwSQLiteConstraintException() throws Exception{
+
         final Note note = new Note(TestUtil.TEST_NOTE_1);
         note.setTitle(null);
 
@@ -118,12 +121,16 @@ public class NoteDaoTest extends NoteDatabaseTest {
         getNoteDao().insertNote(note).blockingGet();
     }
 
+
     /*
         Insert, Update with null title, throw exception
      */
+
     @Test(expected = SQLiteConstraintException.class)
-    public void updateNote_nullTitle_throwSQLiteConstraintException() throws Exception {
+    public void updateNote_nullTitle_throwSQLiteConstraintException() throws Exception{
+
         Note note = new Note(TestUtil.TEST_NOTE_1);
+
         // insert
         getNoteDao().insertNote(note).blockingGet();
 
@@ -136,12 +143,11 @@ public class NoteDaoTest extends NoteDatabaseTest {
         note = new Note(insertedNotes.get(0));
         note.setTitle(null);
         getNoteDao().updateNote(note).blockingGet();
+
     }
+
+
 }
-
-
-
-
 
 
 

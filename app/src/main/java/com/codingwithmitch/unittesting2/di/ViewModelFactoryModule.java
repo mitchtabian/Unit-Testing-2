@@ -1,6 +1,5 @@
 package com.codingwithmitch.unittesting2.di;
 
-
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -12,12 +11,11 @@ import dagger.Binds;
 import dagger.Module;
 import dagger.multibindings.IntoMap;
 
-
 @Module
 public abstract class ViewModelFactoryModule {
 
     @Binds
-    public abstract ViewModelProvider.Factory bindViewModelFactory(ViewModelProviderFactory viewModelFactory);
+    public abstract ViewModelProvider.Factory bindViewModelFactory(ViewModelProviderFactory viewModelProviderFactory);
 
     @Binds
     @IntoMap
@@ -29,3 +27,10 @@ public abstract class ViewModelFactoryModule {
     @ViewModelKey(NotesListViewModel.class)
     public abstract ViewModel bindNotesListViewModel(NotesListViewModel noteViewModel);
 }
+
+
+
+
+
+
+

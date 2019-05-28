@@ -1,7 +1,5 @@
 package com.codingwithmitch.unittesting2.ui.noteslist;
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.Observer;
@@ -49,10 +47,7 @@ public class NotesListViewModel extends ViewModel {
             }
         });
     }
-
 }
-
-
 
 
 

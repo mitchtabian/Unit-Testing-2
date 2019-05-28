@@ -10,9 +10,8 @@ import dagger.android.ContributesAndroidInjector;
 public abstract class ActivityBuildersModule {
 
     @ContributesAndroidInjector
-    abstract NotesListActivity contributeNoteListActivity();
+    abstract NotesListActivity contributeNotesListActivity();
 
     @ContributesAndroidInjector
-    abstract NoteActivity contributeNoteActivity();
-
+    abstract NoteActivity contributeNotesActivity();
 }

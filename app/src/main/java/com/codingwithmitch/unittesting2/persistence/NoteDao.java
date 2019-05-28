@@ -1,6 +1,5 @@
 package com.codingwithmitch.unittesting2.persistence;
 
-
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -14,7 +13,6 @@ import java.util.List;
 
 import io.reactivex.Single;
 
-
 @Dao
 public interface NoteDao {
 
@@ -25,16 +23,11 @@ public interface NoteDao {
     LiveData<List<Note>> getNotes();
 
     @Delete
-    Single<Integer> deleteNote(Note note);
+    Single<Integer> deleteNote(Note note) throws Exception;
 
     @Update
     Single<Integer> updateNote(Note note) throws Exception;
 }
-
-
-
-
-
 
 
 

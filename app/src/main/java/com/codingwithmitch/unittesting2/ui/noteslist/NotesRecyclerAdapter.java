@@ -107,20 +107,3 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<ViewHolder> {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

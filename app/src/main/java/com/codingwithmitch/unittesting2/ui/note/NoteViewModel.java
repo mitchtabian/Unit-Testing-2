@@ -16,6 +16,8 @@ import javax.inject.Inject;
 
 import io.reactivex.functions.Consumer;
 
+import static com.codingwithmitch.unittesting2.repository.NoteRepository.NOTE_TITLE_NULL;
+
 public class NoteViewModel extends ViewModel {
 
     private static final String TAG = "NoteViewModel";
@@ -27,7 +29,7 @@ public class NoteViewModel extends ViewModel {
     private final NoteRepository noteRepository;
 
     // vars
-    private MutableLiveData<Note> note = new MutableLiveData<>();
+    private MutableLiveData<Note> note  = new MutableLiveData<>();
     private MutableLiveData<ViewState> viewState = new MutableLiveData<>();
     private boolean isNewNote;
     private Subscription updateSubscription, insertSubscription;
@@ -38,27 +40,27 @@ public class NoteViewModel extends ViewModel {
         this.noteRepository = noteRepository;
     }
 
-    public LiveData<Resource<Integer>> insertNote() throws Exception {
+    public LiveData<Resource<Integer>> insertNote() throws Exception{
         return LiveDataReactiveStreams.fromPublisher(
                 noteRepository.insertNote(note.getValue())
-                        .doOnSubscribe(new Consumer<Subscription>() {
-                            @Override
-                            public void accept(Subscription subscription) throws Exception {
-                                insertSubscription = subscription;
-                            }
-                        })
+                .doOnSubscribe(new Consumer<Subscription>() {
+                    @Override
+                    public void accept(Subscription subscription) throws Exception {
+                        insertSubscription = subscription;
+                    }
+                })
         );
     }
 
-    public LiveData<Resource<Integer>> updateNote() throws Exception {
+    public LiveData<Resource<Integer>> updateNote() throws Exception{
         return LiveDataReactiveStreams.fromPublisher(
                 noteRepository.updateNote(note.getValue())
-                        .doOnSubscribe(new Consumer<Subscription>() {
-                            @Override
-                            public void accept(Subscription subscription) throws Exception {
-                                updateSubscription = subscription;
-                            }
-                        })
+                .doOnSubscribe(new Consumer<Subscription>() {
+                    @Override
+                    public void accept(Subscription subscription) throws Exception {
+                        updateSubscription = subscription;
+                    }
+                })
         );
     }
 
@@ -74,27 +76,27 @@ public class NoteViewModel extends ViewModel {
         this.viewState.setValue(viewState);
     }
 
-    public void setNote(Note note) throws Exception {
-        if(note.getTitle() == null || note.getTitle().equals("")){
-            throw new NullPointerException("Title can't be null");
-        }
-        this.note.setValue(note);
-    }
-
     public void setIsNewNote(boolean isNewNote){
         this.isNewNote = isNewNote;
     }
-
 
     public LiveData<Resource<Integer>> saveNote() throws Exception{
 
         if(!shouldAllowSave()){
             throw new Exception(NO_CONTENT_ERROR);
         }
-
         cancelPendingTransactions();
 
         return new NoteInsertUpdateHelper<Integer>(){
+
+            @Override
+            public void setNoteId(int noteId) {
+                isNewNote = false;
+                Note currentNote = note.getValue();
+                currentNote.setId(noteId);
+                note.setValue(currentNote);
+            }
+
             @Override
             public LiveData<Resource<Integer>> getAction() throws Exception {
                 if(isNewNote){
@@ -113,14 +115,6 @@ public class NoteViewModel extends ViewModel {
                 else{
                     return ACTION_UPDATE;
                 }
-            }
-
-            @Override
-            public void setNoteId(int noteId) {
-                isNewNote = false;
-                Note currentNote = note.getValue();
-                currentNote.setId(noteId);
-                note.setValue(currentNote);
             }
 
             @Override
@@ -150,6 +144,14 @@ public class NoteViewModel extends ViewModel {
         insertSubscription = null;
     }
 
+    private boolean shouldAllowSave() throws Exception{
+        try{
+            return removeWhiteSpace(note.getValue().getContent()).length() > 0;
+        }catch (NullPointerException e){
+            throw new Exception(NO_CONTENT_ERROR);
+        }
+    }
+
     public void updateNote(String title, String content) throws Exception{
         if(title == null || title.equals("")){
             throw new NullPointerException("Title can't be null");
@@ -165,35 +167,29 @@ public class NoteViewModel extends ViewModel {
         }
     }
 
-    private boolean shouldAllowSave(){
-        return removeWhiteSpace(note.getValue().getContent()).length() > 0;
-    }
-
     private String removeWhiteSpace(String string){
         string = string.replace("\n", "");
         string = string.replace(" ", "");
         return string;
     }
 
+    public void setNote(Note note) throws Exception{
+        if(note.getTitle() == null || note.getTitle().equals("")){
+            throw new Exception(NOTE_TITLE_NULL);
+        }
+        this.note.setValue(note);
+    }
+
     public boolean shouldNavigateBack(){
         if(viewState.getValue() == ViewState.VIEW){
             return true;
         }
-        else {
+        else{
             return false;
         }
     }
+
 }
-
-
-
-
-
-
-
-
-
-
 
 
 

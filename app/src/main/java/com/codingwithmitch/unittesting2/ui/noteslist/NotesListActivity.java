@@ -1,5 +1,6 @@
 package com.codingwithmitch.unittesting2.ui.noteslist;
 
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -154,13 +155,6 @@ public class NotesListActivity extends DaggerAppCompatActivity implements
                 }
             };
 }
-
-
-
-
-
-
-
 
 
 

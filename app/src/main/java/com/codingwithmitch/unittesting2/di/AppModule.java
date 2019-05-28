@@ -4,11 +4,9 @@ import android.app.Application;
 
 import androidx.room.Room;
 
-
 import com.codingwithmitch.unittesting2.persistence.NoteDao;
 import com.codingwithmitch.unittesting2.persistence.NoteDatabase;
 import com.codingwithmitch.unittesting2.repository.NoteRepository;
-import com.codingwithmitch.unittesting2.ui.note.NoteInsertUpdateHelper;
 
 import javax.inject.Singleton;
 
@@ -18,7 +16,7 @@ import dagger.Provides;
 import static com.codingwithmitch.unittesting2.persistence.NoteDatabase.DATABASE_NAME;
 
 @Module
-public class AppModule {
+class AppModule {
 
     @Singleton
     @Provides
@@ -32,24 +30,17 @@ public class AppModule {
 
     @Singleton
     @Provides
-    static NoteDao provideNoteDao(NoteDatabase database){
-        return database.getNoteDao();
+    static NoteDao provideNoteDao(NoteDatabase noteDatabase){
+        return noteDatabase.getNoteDao();
     }
+
 
     @Singleton
     @Provides
     static NoteRepository provideNoteRepository(NoteDao noteDao){
         return new NoteRepository(noteDao);
     }
-
 }
-
-
-
-
-
-
-
 
 
 
