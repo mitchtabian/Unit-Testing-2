@@ -7,7 +7,7 @@
 
 <br>
 <h2>Release Date</h2>
-<p>I hope to begin publishing lectures by Friday May 24, 2019.</p>
+<p>All lectures will be published by Friday May 31, 2019.</p>
 
 <br>
 <h2>Where you can watch the course</h2>
