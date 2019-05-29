@@ -3,6 +3,7 @@
 <h1> Unit-Testing-2</h1>
 <p>Unit Testing with JUnit5, JUnit4, Mockito, MVVM (repository pattern), Room Persistence, RxJava, (Java)</p>
 
+<br><br>
 <h2>Course Content:</h2>
 <br>
 <p>Here's what you will see in the course:</p>
